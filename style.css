@@ -1,0 +1,74 @@
+body {
+  font-family: monospace;
+}
+
+#title {
+  font-size: 1.75em;
+  margin-left: 155px;
+  margin-bottom: 5px;
+}
+
+button:first-of-type {
+  margin-left: 155px;
+}
+
+button {
+  margin-right: 10px;
+  font-family: monospace;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: lightgray;
+}
+
+.beat {
+  padding: 0 5px;
+  margin: 0 5px;
+  cursor: pointer;
+  background-color: lightgray;
+  border: 2px solid black;
+  border-radius: 13px;
+  font-family: serif;
+}
+
+.beat:nth-child(4n) {
+  margin-right: 20px;
+}
+
+.beat:hover {
+  background-color: DeepSkyBlue;
+}
+
+.beat.on:hover {
+  background-color: lightblue;
+}
+
+.beat.on {
+  background-color: gray;
+}
+
+.beat.on.playing {
+  background-color: orange;
+}
+
+.beats {
+
+}
+
+.name {
+  width: 100px;
+  float: left;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.channel {
+  list-style-type: none;
+  margin-bottom: 13px;
+}
+
+.channels {
+
+}
