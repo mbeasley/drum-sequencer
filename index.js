@@ -130,6 +130,134 @@ class Sequencer {
   }
 }
 
+// --------------------------------------------------------------------------
+// Sequencer UI
+// Using the above API, the UI implements a very bare-bones user interface that
+// allows the user to define the beat sequence for each sound / channel. This
+// is not particularly robust or reuseable; probably better to eventually use
+// react or something eventually.
+// --------------------------------------------------------------------------
+
+// BeatElements are the togglable elements that compose the sequence for each
+// channel. They also listen to events emitted by each channel as they play
+// through the sequence such that the user can visualize the audio as it
+// progresses through the loop
+class BeatElement {
+  constructor (beat, index, channel, container) {
+    this.beat = beat
+    this.index = index
+    this.channel = channel
+    this.container = container
+  }
+
+  render () {
+    let beatContainer = document.createElement('span')
+    beatContainer.className = `beat ${this.index} ${(this.beat) ? 'on' : 'off'}`
+    beatContainer.innerHTML = '&nbsp&nbsp' // ¯\_(ツ)_/¯
+    let beatElement = this.container.appendChild(beatContainer)
+
+    beatElement.addEventListener('click', (event) => {
+      this.beat = Number(!this.beat)
+      this.channel.sequence[this.index] = this.beat
+      event.target.className = `beat ${this.index} ${(this.beat) ? 'on' : 'off'}`
+    })
+
+    document.addEventListener(`beat-${this.channel.sound.name}-${this.index}`, (e) => {
+      beatElement.classList.toggle('playing')
+      setTimeout(() => { beatElement.classList.toggle('playing') }, this.channel.duration)
+    })
+  }
+}
+
+// A ChannelElement is responsible for rendering a row in the sequence and the
+// series of BeatElements that make up the channel's sequence
+class ChannelElement {
+  constructor (channel, container) {
+    this.channel = channel
+    this.name = this.channel.sound.name
+    this.container = container
+    this.beats = []
+  }
+
+  render () {
+    let channelContainer = document.createElement('li')
+    channelContainer.className = `channel ${this.name}`
+    channelContainer.innerHTML = `<span class='name'>${this.name}</span><span class='beats'></span>`
+    let channelElement = this.container.appendChild(channelContainer)
+
+    this.channel.sequence.forEach((b, i) => {
+      let beat = new BeatElement(b, i, this.channel, channelElement.querySelector('.beats'))
+      beat.render()
+      this.beats += beat
+    })
+  }
+}
+
+// The SequencerElement is the primary UI object, rendering a ChannelElement for
+// each channel as well as the controls for play / stop and clear buttons
+class SequencerElement {
+  constructor (sequencer, container) {
+    this.sequencer = sequencer
+    this.container = container
+    this.channels = []
+    this.playing = false
+  }
+
+  renderChannels () {
+    let channelsContainer = document.createElement('ul')
+    channelsContainer.className = 'channels'
+    let channelsElement = this.container.appendChild(channelsContainer)
+
+    this.sequencer.channels.forEach(c => {
+      let channel = new ChannelElement(c, channelsElement)
+      channel.render()
+      this.channels += channel
+    })
+
+    return channelsElement
+  }
+
+  render () {
+    let playButton = document.createElement('button')
+    playButton.className = 'play button'
+    playButton.innerHTML = 'play'
+    let playButtonElement = this.container.appendChild(playButton)
+
+    playButtonElement.addEventListener('click', (event) => {
+      if (this.playing) {
+        this.playing = false
+        this.sequencer.stop()
+        event.target.innerHTML = 'play'
+      } else {
+        this.playing = true
+        this.sequencer.play()
+        event.target.innerHTML = 'stop'
+      }
+    })
+
+    let clearButton = document.createElement('button')
+    clearButton.className = 'clear button'
+    clearButton.innerHTML = 'clear'
+    let clearButtonElement = this.container.appendChild(clearButton)
+
+    clearButtonElement.addEventListener('click', (event) => {
+      this.sequencer.channels.forEach(c => c.clear())
+      if (this.channelsElement) {
+        this.container.removeChild(this.channelsElement)
+        this.channelsElement = this.renderChannels()
+      }
+    })
+
+    this.channelsElement = this.renderChannels()
+  }
+}
+
+// --------------------------------------------------------------------------
+// Sequencer Instance
+// Using the API and UI interfaces defined above, we can now instantiate a
+// new drum sequencer for the user to interact with
+// --------------------------------------------------------------------------
+
 const sounds = [
   'hat', 'kick', 'snare', 'tom', 'hat-open', 'ride', 'sidestick', 'ride-bell'
 ].map(s => new Sound(`sounds/${s}.wav`, s))
@@ -144,3 +272,8 @@ sequencer.channels[0].sequence = [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1
 sequencer.channels[1].sequence = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 sequencer.channels[2].sequence = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]
 sequencer.channels[7].sequence = [1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0]
+
+window.onload = (event) => {
+  let ui = new SequencerElement(sequencer, document.querySelector('#main'))
+  ui.render()
+}
