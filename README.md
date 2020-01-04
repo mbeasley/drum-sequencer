@@ -1,6 +1,11 @@
 # The Most Impressive Drum Sequencer
 A Coding Challenge for drum.io
 
+## Demo
+What better than to demonstrate the functionality of an audio-based coding challenge than a silent movie? Alternatively, try it out locally by running `python -m SimpleHTTPServer 8000` and then visiting [localhost:8000](http://localhost:8000).
+
+![A very neat gif](example.gif)
+
 ## Approach
 
 I broke the challenge into three parts:
@@ -27,8 +32,3 @@ I really didn't want to use any libraries, so there are no frameworks or anythin
 - Ability to adjust the steps per beat or beats per par
 - Using the `AudioContext` API may yield more control of the audio and help to reduce artifact; furthermore, doing some type of realtime audio compositing may also help significantly towards that end
 - Specs!
-
-## Demo
-What better than to demonstrate the functionality of an audio-based coding challenge than a silent movie? Alternatively, try it out locally by running `python -m SimpleHTTPServer 8000` and then visiting [localhost:8000](http://localhost:8000).
-
-![A very neat gif](example.gif)
