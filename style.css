@@ -53,10 +53,6 @@ button:hover {
   background-color: orange;
 }
 
-.beats {
-
-}
-
 .name {
   width: 100px;
   float: left;
@@ -67,8 +63,4 @@ button:hover {
 .channel {
   list-style-type: none;
   margin-bottom: 13px;
-}
-
-.channels {
-
 }
