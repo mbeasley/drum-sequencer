@@ -1,4 +1,5 @@
 # The Most Impressive Drum Sequencer
+The challenge presented by the team at drum.io was to build a drum sequencer that played 8 channels with 16 steps at 120 BPM. This meant something that the user could interact with to configure the various sequences per channel. This example provides a very simple approach for the challenge; though the audiophiles out there may disagree.
 
 ## Demo
 What better to demonstrate the functionality of an audio-based coding challenge than with a silent movie? Alternatively, try it out locally by running `python -m SimpleHTTPServer 8000` and then visiting [localhost:8000](http://localhost:8000).
