@@ -1,8 +1,7 @@
 # The Most Impressive Drum Sequencer
-A Coding Challenge for drum.io
 
 ## Demo
-What better than to demonstrate the functionality of an audio-based coding challenge than a silent movie? Alternatively, try it out locally by running `python -m SimpleHTTPServer 8000` and then visiting [localhost:8000](http://localhost:8000).
+What better to demonstrate the functionality of an audio-based coding challenge than with a silent movie? Alternatively, try it out locally by running `python -m SimpleHTTPServer 8000` and then visiting [localhost:8000](http://localhost:8000).
 
 ![A very neat gif](example.gif)
 
